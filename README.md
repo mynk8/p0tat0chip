@@ -1,3 +1,3 @@
-## Hi there I am Mayank Singh 👋
+# Hi, myself Mayank Singh
 
-I write code, use NixOS and laze around.
+🐧 Living on the edge… of a rolling release software

@@ -1,11 +1,62 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+// src/pages/index.astro
+import '../styles/global.css';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const latestPosts = await Astro.glob('./blog/*.md');
+latestPosts.sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date));
+const recentPosts = latestPosts.slice(0, 3);
+const links = [
+	{ name: "GitHub", url: "https://github.com/p0tat0chip" },
+	{ name: "Twitter", url: "https://twitter.com/mynk8s" },
+];
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>My Minimalist Site</title>
+</head>
+<body>
+<div class="container">
+	<header>
+		<nav>
+			<a href="/">Home</a> /
+			<a href="/blog">Blog</a>
+		</nav>
+	</header>
+
+	<main>
+		<h1>Blogs by mynk8s</h1>
+
+		<h2>Recent Posts</h2>
+		<ul class="posts-list">
+			{recentPosts.map(post => (
+				<li class="post-item">
+					<h3 class="post-title">
+						<a href={post.url}>{post.frontmatter.title}</a>
+					</h3>
+					<time class="post-date">{new Date(post.frontmatter.date).toLocaleDateString('en-US', {
+						year: 'numeric',
+						month: 'long',
+						day: 'numeric'
+					})}</time>
+					<p>{post.frontmatter.description}</p>
+				</li>
+			))}
+		</ul>
+
+		<p><a href="/blog">View all posts →</a></p>
+	</main>
+
+	<footer>
+		<p>© {new Date().getFullYear()} My Minimalist Blog</p>
+		<ul class="social-links">
+			{links.map(link => (
+				<li><a href={link.url} target="_blank" rel="noopener noreferrer">{link.name}</a></li>
+			))}
+		</ul>
+	</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+---
+// src/pages/blog.astro
+import '../styles/global.css';
+
+const posts = await Astro.glob('./blog/*.md');
+posts.sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date));
+---
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blog | My Minimalist Site</title>
+</head>
+<body>
+<div class="container">
+    <header>
+        <nav>
+            <a href="/">Home</a> /
+            <a href="/blog">Blog</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Blog</h1>
+
+        <ul class="posts-list">
+            {posts.map(post => (
+                    <li class="post-item">
+                        <h2 class="post-title">
+                            <a href={post.url}>{post.frontmatter.title}</a>
+                        </h2>
+                        <time class="post-date">{new Date(post.frontmatter.date).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        })}</time>
+                        <p>{post.frontmatter.description}</p>
+                    </li>
+            ))}
+        </ul>
+    </main>
+
+    <footer>
+        <p>© {new Date().getFullYear()} My Minimalist Blog</p>
+    </footer>
+</div>
+</body>
+</html>
